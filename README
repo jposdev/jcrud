@@ -1,0 +1,53 @@
+jcrud - Spring Booted Django admin clone
+
+
+This is a little experiment that probably will not go anywhere. I love
+Django's admin, and it annoys me to no end that there doesn't exist
+anything else like it, especially for Java.
+
+I'm a big fan of relational databases, and defining your entities in
+anything else than SQL annoys me too, so jcrud will rely on the metadata
+already found in your database (using SchemaCrawler).
+
+
+TODO
+
+* Search and filtering
+
+* Non-crud operations
+
+* Relational patterns
+
+We should support UI representation of:
+
+ * Outgoing foreign keys: as dropdowns or pickers
+ * Incoming foreign keys: as editable tables
+ * Primary foreign keys: as "polymorphic" forms
+
+And support:
+
+ * Composite primary keys
+
+
+* Security
+
+It should be possible to define fine-grained (table, row and column-level)
+permissions.  We should include a sample relational model (role, user,
+group, permission) with nested role support, but also allow total
+customization and stuff such as LDAP integration.
+
+This should include stuff like workflows ("state" fields possible values
+depend on the current state, permissions of the user and other parameters).
+
+
+* Auditing
+
+We should include database-level auditing of changes integrated in the
+frontend
+
+
+* Multiple frontends
+
+At the moment we aim for a progressively-enhanced HTML UI, but we should be
+able to add different frontends (mobile apps, desktop apps, etc.) with
+minimal work, by exposing the backend functionality via RPC.
