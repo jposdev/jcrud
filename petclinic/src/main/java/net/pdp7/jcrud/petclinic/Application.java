@@ -54,6 +54,11 @@ public class Application {
 	}
 
 	@Bean
+	public IndexController indexController() {
+		return new IndexController();
+	}
+	
+	@Bean
 	public VetController vetController() {
 		return new VetController(database().getTable(schema(), "VETS"), jdbcTemplate, new H2DatabaseType());
 	}
