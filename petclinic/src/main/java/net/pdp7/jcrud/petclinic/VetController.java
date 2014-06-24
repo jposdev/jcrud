@@ -24,4 +24,10 @@ public class VetController extends MasterDetailController {
 		return super.list();
 	}
 
+	@Override
+	@RequestMapping("/add")
+	public ModelAndView addForm() {
+		return super.addForm();
+	}
+	
 }

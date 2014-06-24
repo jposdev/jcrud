@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title>Add</title>
+	</head>
+	<body>
+		<table>
+			<tr th:each="column: ${columns}">
+				<td th:text="${column.name}">Column</td>
+				<td>
+					<input value="value" th:value="${item[column.name]}"/>
+				</td>
+			</tr>
+		</table>
+	</body>
+</html>

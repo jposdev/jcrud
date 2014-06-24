@@ -1,5 +1,6 @@
 package net.pdp7.jcrud;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,11 @@ public class MasterDetailController {
 		this.databaseType = databaseType;
 	}
 
-	public List<Column> listColumns() {
+	protected List<Column> listColumns() {
+		return nonAutoincrementedColumns();
+	}
+
+	protected List<Column> nonAutoincrementedColumns() {
 		return table.getColumns().stream().filter(c -> !databaseType.isAutoincrementColumn(c)).collect(Collectors.toList());
 	}
 	
@@ -33,6 +38,17 @@ public class MasterDetailController {
 		return new ModelAndView("list", new ImmutableMap.Builder<String, Object>()
 				.put("items", items)
 				.put("columns", listColumns())
+				.build());
+	}
+
+	protected List<Column> editableColumns() {
+		return nonAutoincrementedColumns();
+	}
+	
+	public ModelAndView addForm() {
+		return new ModelAndView("change", new ImmutableMap.Builder<String, Object>()
+				.put("item", new HashMap<Object, Object>())
+				.put("columns", editableColumns())
 				.build());
 	}
 	
