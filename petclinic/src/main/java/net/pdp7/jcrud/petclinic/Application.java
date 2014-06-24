@@ -62,6 +62,22 @@ public class Application {
 	public VetController vetController() {
 		return new VetController(database().getTable(schema(), "VETS"), jdbcTemplate, new H2DatabaseType());
 	}
+
+	@Bean
+	public OwnerController ownerController() {
+		return new OwnerController(database().getTable(schema(), "OWNERS"), jdbcTemplate, new H2DatabaseType());
+	}
+
+	@Bean
+	public PetTypeController petTypeController() {
+		return new PetTypeController(database().getTable(schema(), "PET_TYPES"), jdbcTemplate, new H2DatabaseType());
+	}
+
+	@Bean
+	public VisitController visitController() {
+		return new VisitController(database().getTable(schema(), "VISITS"), jdbcTemplate, new H2DatabaseType());
+	}
+	
 	
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
