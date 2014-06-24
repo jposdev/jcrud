@@ -1,0 +1,15 @@
+<html>
+	<head>
+		<title>List</title>
+	</head>
+	<body>
+		<table>
+			<tr>
+				<th th:each="column: ${columns}" th:text="${column.name}">Column</th>
+			</tr>
+			<tr th:each="item: ${items}">
+				<td th:each="column: ${columns}" th:text="${item[column.name]}">Value</td>
+			</tr>
+		</table>
+	</body>
+</html>

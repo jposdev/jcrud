@@ -20,6 +20,11 @@
 			<artifactId>h2</artifactId>
 			<version>1.4.178</version>
 		</dependency>
+		<dependency>
+			<groupId>net.pdp7</groupId>
+			<artifactId>jcrud</artifactId>
+			<version>master</version>
+		</dependency>
 	</dependencies>
 	<pluginRepositories>
 		<pluginRepository>
@@ -32,4 +37,17 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.1.1.RELEASE</version>
 	</parent>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
