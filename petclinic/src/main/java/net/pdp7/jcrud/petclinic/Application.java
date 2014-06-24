@@ -26,7 +26,6 @@ import schemacrawler.utility.SchemaCrawlerUtility;
 
 @Configuration
 @EnableAutoConfiguration
-@EnableWebMvc
 public class Application {
 
 	@Autowired
@@ -54,9 +53,6 @@ public class Application {
 		}
 	}
 
-	@Autowired
-	public SimpleControllerHandlerAdapter simpleControllerHandlerAdapter;
-	
 	@Bean
 	public VetController vetController() {
 		return new VetController(database().getTable(schema(), "VETS"), jdbcTemplate, new H2DatabaseType());
