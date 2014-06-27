@@ -1,10 +1,9 @@
 <html>
 	<body>
 		<ul>
-			<li><a href="vets/list">Vets</a></li>
-			<li><a href="owners/list">Owners</a></li>
-			<li><a href="visits/list">Visits</a></li>
-			<li><a href="pet_types/list">Pet Types</a></li>
+			<li th:each="crud_controller: ${crud_controllers}">
+				<a th:href="${crud_controller.listUri()}" th:text="${crud_controller.table.name}">Table</a>
+			</li>
 		</ul>
 	</body>
 </html>

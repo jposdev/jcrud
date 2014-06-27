@@ -31,7 +31,11 @@ public class MasterDetailController {
 		this.jdbcTemplate = jdbcTemplate;
 		this.databaseType = databaseType;
 	}
-
+	
+	public Table getTable() {
+		return table;
+	}
+	
 	protected List<Column> listColumns() {
 		return nonAutoincrementedColumns();
 	}
@@ -50,7 +54,7 @@ public class MasterDetailController {
 				.build());
 	}
 
-	protected UriComponents listUri() {
+	public UriComponents listUri() {
 		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).list()).build();
 	}
 
@@ -67,7 +71,7 @@ public class MasterDetailController {
 				.build());
 	}
 
-	protected UriComponents addFormUri() {
+	public UriComponents addFormUri() {
 		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).addForm()).build();
 	}
 
@@ -87,7 +91,7 @@ public class MasterDetailController {
 		return new RedirectView(listUri().toUriString());
 	}
 	
-	protected UriComponents addUri() {
+	public UriComponents addUri() {
 		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).add(null)).build();
 	}
 

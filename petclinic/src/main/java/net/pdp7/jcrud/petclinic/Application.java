@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.sql.DataSource;
 
 import net.pdp7.jcrud.H2DatabaseType;
+import net.pdp7.jcrud.MasterDetailController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -53,7 +54,12 @@ public class Application {
 
 	@Bean
 	public IndexController indexController() {
-		return new IndexController();
+		return new IndexController(crudControllers());
+	}
+
+	@Bean
+	public MasterDetailController[] crudControllers() {
+		return new MasterDetailController[] { vetController(), ownerController(), petTypeController(), visitController() };
 	}
 	
 	@Bean
