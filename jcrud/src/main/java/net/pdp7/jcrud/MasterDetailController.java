@@ -1,27 +1,32 @@
 package net.pdp7.jcrud;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponents;
 
 import schemacrawler.schema.Column;
 import schemacrawler.schema.Table;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableMap;
 
 public class MasterDetailController {
 
 	protected final Table table;
-	protected final JdbcTemplate jdbcTemplate;
+	protected final NamedParameterJdbcTemplate jdbcTemplate;
 	protected final DatabaseType databaseType;
 
-	public MasterDetailController(Table table, JdbcTemplate jdbcTemplate, DatabaseType databaseType) {
+	public MasterDetailController(Table table, NamedParameterJdbcTemplate jdbcTemplate, DatabaseType databaseType) {
 		this.table = table;
 		this.jdbcTemplate = jdbcTemplate;
 		this.databaseType = databaseType;
@@ -36,7 +41,7 @@ public class MasterDetailController {
 	}
 	
 	public ModelAndView list() {
-		List<Map<String, Object>> items = jdbcTemplate.queryForList("select * from " + table.getName());
+		List<Map<String, Object>> items = jdbcTemplate.queryForList("select * from " + table.getName(), Collections.emptyMap());
 		
 		return new ModelAndView("list", new ImmutableMap.Builder<String, Object>()
 				.put("items", items)
@@ -66,12 +71,24 @@ public class MasterDetailController {
 		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).addForm()).build();
 	}
 
-	public ModelAndView add() {
-		return null;
+	public View add(WebRequest request) {
+		Map<String, Object> insertColumns = new HashMap<>();
+		for(Column column : editableColumns()) {
+			String columnName = column.getName();
+			String columnValue = request.getParameter(columnName);
+			if(columnValue != null) {
+				insertColumns.put(columnName, columnValue);
+			}
+		}
+		String insertColumnsString = Joiner.on(',').join(insertColumns.keySet());
+		String valueColumns = Joiner.on(',').join(insertColumns.keySet().stream().map(c -> ":" + c).toArray());
+		String query = "insert into " + table.getName() + "(" + insertColumnsString + ") values (" + valueColumns + ")";
+		jdbcTemplate.update(query, insertColumns);
+		return new RedirectView(listUri().toUriString());
 	}
 	
 	protected UriComponents addUri() {
-		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).add()).build();
+		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).add(null)).build();
 	}
 
 }

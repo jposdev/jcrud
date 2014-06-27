@@ -3,10 +3,12 @@ package net.pdp7.jcrud.petclinic;
 import net.pdp7.jcrud.DatabaseType;
 import net.pdp7.jcrud.MasterDetailController;
 
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
 
 import schemacrawler.schema.Table;
 
@@ -14,7 +16,7 @@ import schemacrawler.schema.Table;
 @RequestMapping("/owners")
 public class OwnerController extends MasterDetailController {
 
-	public OwnerController(Table table, JdbcTemplate jdbcTemplate, DatabaseType databaseType) {
+	public OwnerController(Table table, NamedParameterJdbcTemplate jdbcTemplate, DatabaseType databaseType) {
 		super(table, jdbcTemplate, databaseType);
 	}
 	
@@ -32,7 +34,7 @@ public class OwnerController extends MasterDetailController {
 
 	@Override
 	@RequestMapping("/add")
-	public ModelAndView add() {
-		return super.add();
+	public View add(WebRequest request) {
+		return super.add(request);
 	}
 }

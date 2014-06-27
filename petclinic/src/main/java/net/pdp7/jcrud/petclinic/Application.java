@@ -13,9 +13,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
 import schemacrawler.schema.Database;
 import schemacrawler.schema.RoutineType;
@@ -32,7 +30,7 @@ public class Application {
 	public DataSource dataSource;
 	
 	@Autowired
-	public JdbcTemplate jdbcTemplate;
+	public NamedParameterJdbcTemplate jdbcTemplate;
 	
 	@Bean
 	public Schema schema() {

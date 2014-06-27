@@ -10,7 +10,7 @@
 				<tr th:each="column: ${columns}">
 					<td th:text="${column.name}">Column</td>
 					<td>
-						<input value="value" th:value="${item[column.name]}"/>
+						<input value="value" th:name="${column.name}" th:value="${item[column.name]}"/>
 					</td>
 				</tr>
 			</table>
