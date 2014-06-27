@@ -3,13 +3,18 @@
 		<title>Add</title>
 	</head>
 	<body>
-		<table>
-			<tr th:each="column: ${columns}">
-				<td th:text="${column.name}">Column</td>
-				<td>
-					<input value="value" th:value="${item[column.name]}"/>
-				</td>
-			</tr>
-		</table>
+		<a th:href="${list}">List</a>
+
+		<form method="post" th:action="${change_save}">
+			<table>
+				<tr th:each="column: ${columns}">
+					<td th:text="${column.name}">Column</td>
+					<td>
+						<input value="value" th:value="${item[column.name]}"/>
+					</td>
+				</tr>
+			</table>
+			<input type="submit"/>
+		</form>
 	</body>
 </html>

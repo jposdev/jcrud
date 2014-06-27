@@ -24,4 +24,15 @@ public class PetTypeController extends MasterDetailController {
 		return super.list();
 	}
 
+	@Override
+	@RequestMapping("/add_form")
+	public ModelAndView addForm() {
+		return super.addForm();
+	}
+
+	@Override
+	@RequestMapping("/add")
+	public ModelAndView add() {
+		return super.add();
+	}
 }

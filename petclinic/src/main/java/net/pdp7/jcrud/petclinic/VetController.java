@@ -17,7 +17,7 @@ public class VetController extends MasterDetailController {
 	public VetController(Table table, JdbcTemplate jdbcTemplate, DatabaseType databaseType) {
 		super(table, jdbcTemplate, databaseType);
 	}
-	
+
 	@Override
 	@RequestMapping("/list")
 	public ModelAndView list() {
@@ -25,9 +25,14 @@ public class VetController extends MasterDetailController {
 	}
 
 	@Override
-	@RequestMapping("/add")
+	@RequestMapping("/add_form")
 	public ModelAndView addForm() {
 		return super.addForm();
 	}
-	
+
+	@Override
+	@RequestMapping("/add")
+	public ModelAndView add() {
+		return super.add();
+	}
 }

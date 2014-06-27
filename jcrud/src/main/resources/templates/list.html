@@ -11,5 +11,6 @@
 				<td th:each="column: ${columns}" th:text="${item[column.name]}">Value</td>
 			</tr>
 		</table>
+		<a th:href="${add_form}">Add</a>
 	</body>
 </html>
