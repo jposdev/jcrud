@@ -33,7 +33,7 @@ public class TableController extends TableService {
 
 		return new ModelAndView("list", new ImmutableMap.Builder<String, Object>()
 				.put("items", items)
-				.put("columns", listColumns())
+				.put("columns", listColumns().collect(Collectors.toList()))
 				.put("add_form", addFormUri())
 				.build()
 		);
@@ -96,7 +96,7 @@ public class TableController extends TableService {
 	protected ModelAndView changeForm(Map<String, Object> item, UriComponents changeSaveUri) {
 		return new ModelAndView("change", new ImmutableMap.Builder<String, Object>()
 				.put("item", item)
-				.put("columns", editableColumns())
+				.put("columns", editableColumns().collect(Collectors.toList()))
 				.put("change_save", changeSaveUri)
 				.put("list", listUri())
 				.build()
