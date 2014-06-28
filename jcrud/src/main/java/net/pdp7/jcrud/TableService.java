@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -43,7 +44,7 @@ public class TableService {
 	}
 
 	public void updateItem(Map<String, Object> primaryKeys, Map<String, Object> updateKeys) {
-		String sets = editableColumnNames().stream()
+		String sets = editableColumnNames()
 				.map(cn -> cn + "=:" + cn)
 				.collect(Collectors.joining(","));
 
@@ -54,41 +55,40 @@ public class TableService {
 	}
 
 	protected String conditionWherePrimaryKeys() {
-		return primaryKeyColumnNames().stream()
+		return primaryKeyColumnNames()
 				.map(cn -> cn + " = :" + cn)
 				.collect(Collectors.joining(" and "));
 	}
 
 	protected Map<String, String> getPrimaryKeysFromItem(Map<String, Object> item) {
-		return primaryKeyColumnNames().stream().collect(Collectors.toMap(cn -> cn, cn -> item.get(cn).toString()));
+		return primaryKeyColumnNames().collect(Collectors.toMap(cn -> cn, cn -> item.get(cn).toString()));
 	}
 
 	public Table getTable() {
 		return table;
 	}
 
-	protected List<Column> listColumns() {
+	protected Stream<Column> listColumns() {
 		return nonAutoincrementedColumns();
 	}
 
-	protected List<Column> nonAutoincrementedColumns() {
-		return table.getColumns().stream().filter(c -> !databaseType.isAutoincrementColumn(c))
-				.collect(Collectors.toList());
+	protected Stream<Column> nonAutoincrementedColumns() {
+		return table.getColumns().stream().filter(c -> !databaseType.isAutoincrementColumn(c));
 	}
 
 	protected List<IndexColumn> primaryKeyColumns() {
 		return table.getPrimaryKey().getColumns();
 	}
 
-	protected List<String> primaryKeyColumnNames() {
-		return primaryKeyColumns().stream().map(IndexColumn::getName).collect(Collectors.toList());
+	protected Stream<String> primaryKeyColumnNames() {
+		return primaryKeyColumns().stream().map(IndexColumn::getName);
 	}
 
-	protected List<Column> editableColumns() {
+	protected Stream<Column> editableColumns() {
 		return nonAutoincrementedColumns();
 	}
 
-	protected List<String> editableColumnNames() {
-		return editableColumns().stream().map(Column::getName).collect(Collectors.toList());
+	protected Stream<String> editableColumnNames() {
+		return editableColumns().map(Column::getName);
 	}
 }

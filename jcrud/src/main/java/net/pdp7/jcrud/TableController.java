@@ -104,12 +104,12 @@ public class TableController extends TableService {
 	}
 
 	protected Map<String, Object> getEditableColumnsFromRequest(WebRequest request) {
-		return editableColumnNames().stream()
+		return editableColumnNames()
 				.collect(Collectors.toMap(cn -> cn, cn -> request.getParameter(cn)));
 	}
 
 	protected Map<String, Object> getPrimaryKeysFromRequest(WebRequest request) {
-		return primaryKeyColumnNames().stream()
+		return primaryKeyColumnNames()
 				.collect(Collectors.toMap(cn -> cn, cn -> request.getParameter(cn)));
 	}
 
