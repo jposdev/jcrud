@@ -1,6 +1,6 @@
 package net.pdp7.jcrud.petclinic;
 
-import net.pdp7.jcrud.MasterDetailController;
+import net.pdp7.jcrud.TableController;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +12,9 @@ import com.google.common.collect.Maps;
 @Controller
 public class IndexController {
 
-	protected MasterDetailController[] crudControllers;
+	protected TableController[] crudControllers;
 
-	public IndexController(MasterDetailController[] crudControllers) {
+	public IndexController(TableController[] crudControllers) {
 		this.crudControllers = crudControllers;
 	}
 

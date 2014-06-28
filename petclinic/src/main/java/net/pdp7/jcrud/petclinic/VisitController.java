@@ -1,7 +1,7 @@
 package net.pdp7.jcrud.petclinic;
 
 import net.pdp7.jcrud.DatabaseType;
-import net.pdp7.jcrud.MasterDetailController;
+import net.pdp7.jcrud.TableController;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,7 @@ import schemacrawler.schema.Table;
 
 @Controller
 @RequestMapping("/visits")
-public class VisitController extends MasterDetailController {
+public class VisitController extends TableController {
 
 	public VisitController(Table table, NamedParameterJdbcTemplate jdbcTemplate, DatabaseType databaseType) {
 		super(table, jdbcTemplate, databaseType);
