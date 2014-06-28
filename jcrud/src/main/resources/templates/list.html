@@ -9,6 +9,7 @@
 			</tr>
 			<tr th:each="item: ${items}">
 				<td th:each="column: ${columns}" th:text="${item[column.name]}">Value</td>
+				<td><a th:href="${item.edit_uri}">Edit</a></td>
 			</tr>
 		</table>
 		<a th:href="${add_form}">Add</a>

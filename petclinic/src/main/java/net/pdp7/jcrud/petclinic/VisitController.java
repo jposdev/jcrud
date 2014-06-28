@@ -37,4 +37,16 @@ public class VisitController extends MasterDetailController {
 	public View add(WebRequest request) {
 		return super.add(request);
 	}
+
+	@Override
+	@RequestMapping("/edit_form")
+	public ModelAndView editForm(WebRequest request) {
+		return super.editForm(request);
+	}
+
+	@Override
+	@RequestMapping("/edit")
+	public View edit(WebRequest request) {
+		return super.edit(request);
+	}
 }
