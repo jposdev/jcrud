@@ -13,8 +13,6 @@ import schemacrawler.schema.Column;
 import schemacrawler.schema.IndexColumn;
 import schemacrawler.schema.Table;
 
-import com.google.common.base.Joiner;
-
 public class TableService {
 
 	protected final Table table;
@@ -37,8 +35,8 @@ public class TableService {
 	}
 
 	public void insertItem(Map<String, Object> insertKeys) {
-		String insertColumnsString = Joiner.on(',').join(insertKeys.keySet());
-		String valueColumns = Joiner.on(',').join(insertKeys.keySet().stream().map(c -> ":" + c).toArray());
+		String insertColumnsString = editableColumnNames().collect(Collectors.joining(","));
+		String valueColumns = editableColumnNames().map(c -> ":" + c).collect(Collectors.joining(","));
 		String query = "insert into " + table.getName() + "(" + insertColumnsString + ") values (" + valueColumns + ")";
 		jdbcTemplate.update(query, insertKeys);
 	}
