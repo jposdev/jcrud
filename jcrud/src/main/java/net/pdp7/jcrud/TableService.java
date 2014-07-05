@@ -71,7 +71,7 @@ public class TableService {
 	}
 
 	protected Stream<Column> nonAutoincrementedColumns() {
-		return table.getColumns().stream().filter(c -> !databaseType.isAutoincrementColumn(c));
+		return table.getColumns().stream().filter(c -> !c.isAutoIncremented());
 	}
 
 	protected List<IndexColumn> primaryKeyColumns() {
