@@ -22,8 +22,8 @@ import com.google.common.collect.ImmutableMap;
 
 public class TableController extends TableService {
 
-	public TableController(Table table, NamedParameterJdbcTemplate jdbcTemplate, DatabaseType databaseType) {
-		super(table, jdbcTemplate, databaseType);
+	public TableController(Table table, NamedParameterJdbcTemplate jdbcTemplate) {
+		super(table, jdbcTemplate);
 	}
 
 	public ModelAndView list() {

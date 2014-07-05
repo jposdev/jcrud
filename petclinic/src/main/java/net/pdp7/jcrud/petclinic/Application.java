@@ -5,7 +5,6 @@ import java.util.Collections;
 
 import javax.sql.DataSource;
 
-import net.pdp7.jcrud.H2DatabaseType;
 import net.pdp7.jcrud.TableController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,22 +63,22 @@ public class Application {
 	
 	@Bean
 	public VetController vetController() {
-		return new VetController(database().getTable(schema(), "VETS"), jdbcTemplate, new H2DatabaseType());
+		return new VetController(database().getTable(schema(), "VETS"), jdbcTemplate);
 	}
 
 	@Bean
 	public OwnerController ownerController() {
-		return new OwnerController(database().getTable(schema(), "OWNERS"), jdbcTemplate, new H2DatabaseType());
+		return new OwnerController(database().getTable(schema(), "OWNERS"), jdbcTemplate);
 	}
 
 	@Bean
 	public PetTypeController petTypeController() {
-		return new PetTypeController(database().getTable(schema(), "PET_TYPES"), jdbcTemplate, new H2DatabaseType());
+		return new PetTypeController(database().getTable(schema(), "PET_TYPES"), jdbcTemplate);
 	}
 
 	@Bean
 	public VisitController visitController() {
-		return new VisitController(database().getTable(schema(), "VISITS"), jdbcTemplate, new H2DatabaseType());
+		return new VisitController(database().getTable(schema(), "VISITS"), jdbcTemplate);
 	}
 	
 	

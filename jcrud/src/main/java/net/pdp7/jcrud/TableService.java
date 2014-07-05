@@ -17,12 +17,10 @@ public class TableService {
 
 	protected final Table table;
 	protected final NamedParameterJdbcTemplate jdbcTemplate;
-	protected final DatabaseType databaseType;
 
-	public TableService(Table table, NamedParameterJdbcTemplate jdbcTemplate, DatabaseType databaseType) {
+	public TableService(Table table, NamedParameterJdbcTemplate jdbcTemplate) {
 		this.table = table;
 		this.jdbcTemplate = jdbcTemplate;
-		this.databaseType = databaseType;
 	}
 
 	public List<Map<String, Object>> listItems() {
