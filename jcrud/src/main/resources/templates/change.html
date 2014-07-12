@@ -14,6 +14,25 @@
 					</td>
 				</tr>
 			</table>
+
+			<fieldset th:each="inline: ${inlines}">
+				<p th:text="${inline.tableController.table.name}"/>
+				<table>
+					<tr>
+						<td th:each="column: ${inline.editableColumns}" th:text="${column.name}"/>
+						<td>Keep</td>
+					</tr>
+					<tr th:each="inline_item: ${inline.list(item)}">
+						<td th:each="column: ${inline.editableColumns}">
+							<input value="value" th:name="${inline.inlineId + '/' + inline_item['_primary_key'] + '/' + column.name}" th:value="${inline_item[column.name]}"/>
+						</td> 
+						<td>
+							<input type="checkbox" th:name="${inline.inlineId + '/' + inline_item['_primary_key'] + '/_keep'}" th:checked="${inline_item['_keep']}" value="keep"/>
+						</td>
+					</tr>
+				</table>
+			</fieldset>
+
 			<input type="submit"/>
 		</form>
 	</body>

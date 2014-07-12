@@ -2,8 +2,10 @@ package net.pdp7.jcrud;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -16,16 +18,27 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponents;
 
+import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.Table;
 
 import com.google.common.collect.ImmutableMap;
 
 public class TableController extends TableService {
 
+	protected final Set<Inline> inlines = new HashSet<>();
+	
 	public TableController(Table table, NamedParameterJdbcTemplate jdbcTemplate) {
 		super(table, jdbcTemplate);
 	}
 
+	public void addInline(ForeignKey foreignKey, TableController tableController) {
+		inlines.add(new Inline(foreignKey, tableController));
+	}
+
+	public void addInline(ForeignKey foreignKey, TableController tableController, String inlineId) {
+		inlines.add(new Inline(foreignKey, tableController, inlineId));
+	}
+	
 	public ModelAndView list() {
 		List<Map<String, Object>> items = listItems();
 
@@ -56,6 +69,9 @@ public class TableController extends TableService {
 	public View add(WebRequest request) {
 		Map<String, Object> insertColumns = getEditableColumnsFromRequest(request);
 		insertItem(insertColumns);
+		for(Inline inline : inlines) {
+			inline.add(request);
+		}
 		return new RedirectView(listUri().toUriString());
 	}
 
@@ -83,6 +99,9 @@ public class TableController extends TableService {
 		Map<String, Object> updateKeys = getEditableColumnsFromRequest(request);
 
 		updateItem(primaryKeys, updateKeys);
+		for(Inline inline : inlines) {
+			inline.update(primaryKeys, request);
+		}
 		return new RedirectView(listUri().toUriString());
 	}
 
@@ -99,6 +118,7 @@ public class TableController extends TableService {
 				.put("columns", editableColumns().collect(Collectors.toList()))
 				.put("change_save", changeSaveUri)
 				.put("list", listUri())
+				.put("inlines", inlines)
 				.build()
 		);
 	}

@@ -27,6 +27,11 @@ public class TableService {
 		return jdbcTemplate.queryForList("select * from " + table.getName(), Collections.emptyMap());
 	}
 
+	public List<Map<String, Object>> listItems(Map<String, Object> conditions) {
+		String itemQuery = "select * from " + table.getName() + " where " + conditionWhereKeys(conditions);
+		return jdbcTemplate.queryForList(itemQuery, conditions);
+	}
+
 	public Map<String, Object> getItem(Map<String, Object> primaryKeys) {
 		String itemQuery = "select * from " + table.getName() + " where " + conditionWherePrimaryKeys();
 		return jdbcTemplate.queryForMap(itemQuery, primaryKeys);
@@ -39,7 +44,8 @@ public class TableService {
 		jdbcTemplate.update(query, insertKeys);
 	}
 
-	public void updateItem(Map<String, Object> primaryKeys, Map<String, Object> updateKeys) {
+	// FIXME: V of primaryKeys being ? extends Object is a hack
+	public void updateItem(Map<String, ? extends Object> primaryKeys, Map<String, Object> updateKeys) {
 		String sets = editableColumnNames()
 				.map(cn -> cn + "=:" + cn)
 				.collect(Collectors.joining(","));
@@ -56,6 +62,12 @@ public class TableService {
 				.collect(Collectors.joining(" and "));
 	}
 
+	protected String conditionWhereKeys(Map<String, Object> conditions) {
+		return conditions.keySet().stream()
+				.map(cn -> cn + " = :" + cn)
+				.collect(Collectors.joining(" and "));
+	}
+	
 	protected Map<String, String> getPrimaryKeysFromItem(Map<String, Object> item) {
 		return primaryKeyColumnNames().collect(Collectors.toMap(cn -> cn, cn -> item.get(cn).toString()));
 	}
