@@ -97,7 +97,7 @@ public class Application {
 	}
 
 	public SelectForeignKeyWidget petTypeWidget() {
-		return new SelectForeignKeyWidget(column("PETS", "PET_TYPE"), petTypeController());
+		return new SelectForeignKeyWidget(petTypeController());
 	}
 
 	

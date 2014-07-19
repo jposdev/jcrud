@@ -2,20 +2,17 @@ package net.pdp7.jcrud.widgets;
 
 import java.util.Map;
 
-import net.pdp7.jcrud.TableController;
-import schemacrawler.schema.Column;
+import net.pdp7.jcrud.TableService;
 
 import com.hp.gagawa.java.elements.Option;
 import com.hp.gagawa.java.elements.Select;
 
 public class SelectForeignKeyWidget extends DefaultWidget {
 
-	protected final Column column;
-	protected final TableController tableController;
+	protected final TableService tableService;
 
-	public SelectForeignKeyWidget(Column column, TableController tableController) {
-		this.column = column;
-		this.tableController = tableController;
+	public SelectForeignKeyWidget(TableService tableService) {
+		this.tableService = tableService;
 	}
 
 	@Override
@@ -23,15 +20,15 @@ public class SelectForeignKeyWidget extends DefaultWidget {
 		Select select = new Select()
 			.setName(name);
 
-		for(Map<String, Object> item : tableController.listItems()) {
-			Map<String, String> primaryKeys = tableController.getPrimaryKeysFromItem(item);
+		for(Map<String, Object> item : tableService.listItems()) {
+			Map<String, String> primaryKeys = tableService.getPrimaryKeysFromItem(item);
 			if(primaryKeys.size() != 1) {
 				throw new UnsupportedOperationException("Composite foreign keys are not supported");
 			}
 			String primaryKey = primaryKeys.values().iterator().next();
 			Option option = new Option()
 				.setValue(primaryKey)
-				.appendText(tableController.getItemAsString(item));
+				.appendText(tableService.getItemAsString(item));
 			if(primaryKey == value) {
 				option.setSelected("selected");
 			}
