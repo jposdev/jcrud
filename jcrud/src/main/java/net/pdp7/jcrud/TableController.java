@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import net.pdp7.jcrud.widgets.ColumnWidgetFactory;
+import net.pdp7.jcrud.widgets.DefaultWidget;
+import net.pdp7.jcrud.widgets.Widget;
+
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -18,6 +22,7 @@ import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBui
 import org.springframework.web.servlet.view.RedirectView;
 import org.springframework.web.util.UriComponents;
 
+import schemacrawler.schema.Column;
 import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.Table;
 
@@ -26,6 +31,7 @@ import com.google.common.collect.ImmutableMap;
 public class TableController extends TableService {
 
 	protected final Set<Inline> inlines = new HashSet<>();
+	protected ColumnWidgetFactory columnWidgetFactory = new ColumnWidgetFactory();
 	
 	public TableController(Table table, NamedParameterJdbcTemplate jdbcTemplate) {
 		super(table, jdbcTemplate);
@@ -116,6 +122,7 @@ public class TableController extends TableService {
 		return new ModelAndView("change", new ImmutableMap.Builder<String, Object>()
 				.put("item", item)
 				.put("columns", editableColumns().collect(Collectors.toList()))
+				.put("widgets", getWidgets())
 				.put("change_save", changeSaveUri)
 				.put("list", listUri())
 				.put("inlines", inlines)
@@ -123,9 +130,16 @@ public class TableController extends TableService {
 		);
 	}
 
+	public Map<String, Widget> getWidgets() {
+		return editableColumns().collect(Collectors.toMap(
+				Column::getName,
+				c -> columnWidgetFactory.widgetForColumn(c)
+		));
+	}
+
 	protected Map<String, Object> getEditableColumnsFromRequest(WebRequest request) {
 		return editableColumnNames()
-				.collect(Collectors.toMap(cn -> cn, cn -> request.getParameter(cn)));
+				.collect(Collectors.toMap(cn -> cn, cn -> getWidgets().get(cn).parseFromRequest(request, cn)));
 	}
 
 	protected Map<String, Object> getPrimaryKeysFromRequest(WebRequest request) {

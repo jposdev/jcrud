@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Add</title>
+		<link th:href="@{/webjars/jquery-ui/1.11.0/jquery-ui.css}" rel="stylesheet"></link>
 	</head>
 	<body>
 		<a th:href="${list}">List</a>
@@ -9,9 +10,7 @@
 			<table>
 				<tr th:each="column: ${columns}">
 					<td th:text="${column.name}">Column</td>
-					<td>
-						<input value="value" th:name="${column.name}" th:value="${item[column.name]}"/>
-					</td>
+					<td th:utext="${widgets[column.name].render(column.name, item[column.name])}"/>
 				</tr>
 			</table>
 
@@ -23,9 +22,8 @@
 						<td>Keep</td>
 					</tr>
 					<tr th:each="inline_item: ${inline.list(item)}">
-						<td th:each="column: ${inline.editableColumns}">
-							<input value="value" th:name="${inline.inlineId + '/' + inline_item['_primary_key'] + '/' + column.name}" th:value="${inline_item[column.name]}"/>
-						</td> 
+						<td th:each="column: ${inline.editableColumns}"
+							th:utext="${inline.tableController.widgets[column.name].render(inline.inlineId + '/' + inline_item['_primary_key'] + '/' + column.name, inline_item[column.name])}"/>
 						<td>
 							<input type="checkbox" th:name="${inline.inlineId + '/' + inline_item['_primary_key'] + '/_keep'}" th:checked="${inline_item['_keep']}" value="keep"/>
 						</td>
@@ -35,5 +33,8 @@
 
 			<input type="submit"/>
 		</form>
+	<script th:src="@{/webjars/jquery/1.11.1/jquery.js}"></script>
+	<script th:src="@{/webjars/jquery-ui/1.11.0/jquery-ui.js}"></script>
+	<script th:src="@{/static/js/widgets.js}"></script>
 	</body>
 </html>

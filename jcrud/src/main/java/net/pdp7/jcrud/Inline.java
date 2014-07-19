@@ -89,19 +89,36 @@ public class Inline {
 	}
 
 	protected void processInlineAdds(Map<String, Object> primaryKeys, WebRequest request) {
-		for(int i=0; request.getParameterMap().keySet().contains(inlineId + "/extra_" + i + "/_keep"); i++) {
-			if(!request.getParameter(inlineId + "/extra_" + i + "/_keep").equals("keep")) {
+		for(int i=0; request.getParameterMap().keySet().contains(inlineAddKeep(i)); i++) {
+			if(!request.getParameter(inlineAddKeep(i)).equals("keep")) {
 				continue;
 			}
 			final int inlineIndex = i;
 			Map<String, Object> insertKeys = getEditableColumns().stream()
 					.collect(Collectors.toMap(
 							c -> c.getName(),
-							c -> request.getParameter(inlineId + "/extra_" + inlineIndex + "/" + c.getName())
+							c -> tableController.getWidgets()
+									.get(c.getName())
+									.parseFromRequest(
+											request,
+											inlineAddInputName(inlineIndex, c)
+									)
 					));
 			insertKeys.putAll(primaryKeys);
 			tableController.insertItem(insertKeys);
 		}
+	}
+
+	protected String inlineAddPrefix(int i) {
+		return inlineId + "/extra_" + i;
+	}
+
+	protected String inlineAddKeep(int i) {
+		return inlineAddPrefix(i) + "/_keep";
+	}
+
+	protected String inlineAddInputName(int i, Column c) {
+		return inlineAddPrefix(i) + "/" + c.getName();
 	}
 
 	protected void processInlineUpdates(Map<String, Object> primaryKeys, WebRequest request) {
@@ -112,7 +129,12 @@ public class Inline {
 			Map<String, Object> updateKeys = getEditableColumns().stream()
 					.collect(Collectors.toMap(
 							c -> c.getName(),
-							c -> request.getParameter(inlineId + "/" + primaryKeysToString(itemToUpdatePrimaryKeys) + "/" + c.getName())
+							c -> tableController.getWidgets()
+									.get(c.getName())
+									.parseFromRequest(
+											request,
+											inlineId + "/" + primaryKeysToString(itemToUpdatePrimaryKeys) + "/" + c.getName()
+									)
 					));
 			updateKeys.putAll(primaryKeys);
 			tableController.updateItem(itemToUpdatePrimaryKeys, updateKeys);
