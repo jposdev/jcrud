@@ -1,5 +1,4 @@
-jcrud - Spring Booted Django admin clone
-
+jcrud - Spring Booted Django admin clone - https://github.com/alexpdp7/jcrud
 
 This is a little experiment that probably will not go anywhere. I love
 Django's admin, and it annoys me to no end that there doesn't exist
@@ -8,6 +7,35 @@ anything else like it, especially for Java.
 I'm a big fan of relational databases, and defining your entities in
 anything else than SQL annoys me too, so jcrud will rely on the metadata
 already found in your database (using SchemaCrawler).
+
+
+REQUIREMENTS
+
+* Java 8
+* Spring 4 (webmvc, jdbc)
+* Thymeleaf 2.1.3 (although you should be able to override the default
+  templates with any other template engine supported by Spring Boot)
+* jQuery, jQuery UI 1.11 (bundled as webjars)
+
+Sample apps use Spring Boot 1.1.1, and you should probably use it too-
+we adopt many of its autoconfiguration properties and if you don't
+want to use it, you will need to adapt many things.
+
+
+GUIDE
+
+Just mvn:install jcrud to build and install it. The rest of projects are
+sample applications, once jcrud is installed, you should be able to run:
+
+$ mvn spring-boot:run
+
+from their directory to run them, check their READMEs for details. Most
+samples use H2 and get an automatically configured transient database
+Spring Boot-style so you shouldn't need to do anything else.
+
+You should be able to just add some TableControllers to an
+ApplicationContext, pointing at your tables and go. Take a look at petclinic
+for the basic structure.
 
 
 TODO
@@ -21,7 +49,6 @@ TODO
 We should support UI representation of:
 
  * Outgoing foreign keys: as dropdowns or pickers
- * Incoming foreign keys: as editable tables
  * Primary foreign keys: as "polymorphic" forms
 
 And support:

@@ -1,0 +1,8 @@
+Sample jcrud application
+
+
+To run, mvn:install jcrud and:
+
+$ mvn spring-boot:run
+
+Browse to http://localhost:9911/
