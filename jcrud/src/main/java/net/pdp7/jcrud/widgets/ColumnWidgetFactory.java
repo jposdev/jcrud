@@ -1,6 +1,7 @@
 package net.pdp7.jcrud.widgets;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
@@ -13,6 +14,7 @@ public class ColumnWidgetFactory {
 	protected long textAreaThreshold = 101;
 	protected Map<Class<?>, Widget> widgetsByClass = new ImmutableMap.Builder<Class<?>, Widget>()
 			.put(Date.class, new DateWidget())
+			.put(Timestamp.class, new TimestampWidget())
 			.build();
 
 	public Widget widgetForColumn(Column column) {
