@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import net.pdp7.jcrud.widgets.ColumnWidgetFactory;
-import net.pdp7.jcrud.widgets.DefaultWidget;
 import net.pdp7.jcrud.widgets.Widget;
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
