@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.sql.DataSource;
 
 import net.pdp7.jcrud.TableController;
+import net.pdp7.jcrud.widgets.SelectForeignKeyWidget;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
+import schemacrawler.schema.Column;
 import schemacrawler.schema.Database;
 import schemacrawler.schema.ForeignKey;
 import schemacrawler.schema.RoutineType;
@@ -73,7 +75,9 @@ public class Application {
 
 	@Bean
 	public VetSpecialtyController vetSpecialtyController() {
-		return new VetSpecialtyController(table("VET_SPECIALTIES"), jdbcTemplate);
+		VetSpecialtyController vetSpecialtyController = new VetSpecialtyController(table("VET_SPECIALTIES"), jdbcTemplate);
+		vetSpecialtyController.setWidgetForColumn(column("VET_SPECIALTIES", "PET_TYPE"), petTypeWidget());
+		return vetSpecialtyController;
 	}
 	
 	
@@ -88,7 +92,12 @@ public class Application {
 	public PetController petController() {
 		PetController petController = new PetController(table("PETS"), jdbcTemplate);
 		petController.addInline(foreignKey("VISITS", "VISIT__PET"), visitController());
+		petController.setWidgetForColumn(column("PETS", "PET_TYPE"), petTypeWidget());
 		return petController;
+	}
+
+	public SelectForeignKeyWidget petTypeWidget() {
+		return new SelectForeignKeyWidget(column("PETS", "PET_TYPE"), petTypeController());
 	}
 
 	
@@ -108,6 +117,10 @@ public class Application {
 
 	protected ForeignKey foreignKey(String tableName, String foreignKeyName) {
 		return table(tableName).getForeignKeys().stream().filter(fk -> fk.getName().equals(foreignKeyName)).findFirst().get();
+	}
+
+	protected Column column(String tableName, String name) {
+		return table(tableName).getColumn(name);
 	}
 
 	public static void main(String[] args) {

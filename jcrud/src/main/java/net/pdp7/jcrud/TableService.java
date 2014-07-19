@@ -68,10 +68,17 @@ public class TableService {
 				.collect(Collectors.joining(" and "));
 	}
 	
-	protected Map<String, String> getPrimaryKeysFromItem(Map<String, Object> item) {
+	public Map<String, String> getPrimaryKeysFromItem(Map<String, Object> item) {
 		return primaryKeyColumnNames().collect(Collectors.toMap(cn -> cn, cn -> item.get(cn).toString()));
 	}
 
+	/**
+	 * @return a string representation of an item, override to change it
+	 */
+	public String getItemAsString(Map<String, Object> item) {
+		return primaryKeyColumnNames().map(cn -> item.get(cn).toString()).collect(Collectors.joining(" "));
+	}
+	
 	public Table getTable() {
 		return table;
 	}

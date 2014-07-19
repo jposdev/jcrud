@@ -32,6 +32,7 @@ public class TableController extends TableService {
 
 	protected final Set<Inline> inlines = new HashSet<>();
 	protected ColumnWidgetFactory columnWidgetFactory = new ColumnWidgetFactory();
+	protected final Map<String, Widget> columnWidgets = new HashMap<>();
 	
 	public TableController(Table table, NamedParameterJdbcTemplate jdbcTemplate) {
 		super(table, jdbcTemplate);
@@ -43,6 +44,10 @@ public class TableController extends TableService {
 
 	public void addInline(ForeignKey foreignKey, TableController tableController, String inlineId) {
 		inlines.add(new Inline(foreignKey, tableController, inlineId));
+	}
+
+	public void setWidgetForColumn(Column column, Widget widget) {
+		columnWidgets.put(column.getName(), widget);
 	}
 	
 	public ModelAndView list() {
@@ -133,8 +138,12 @@ public class TableController extends TableService {
 	public Map<String, Widget> getWidgets() {
 		return editableColumns().collect(Collectors.toMap(
 				Column::getName,
-				c -> columnWidgetFactory.widgetForColumn(c)
+				c -> getWidgetForColumn(c)
 		));
+	}
+
+	protected Widget getWidgetForColumn(Column c) {
+		return columnWidgets.getOrDefault(c.getName(), columnWidgetFactory.widgetForColumn(c));
 	}
 
 	protected Map<String, Object> getEditableColumnsFromRequest(WebRequest request) {
