@@ -2,7 +2,7 @@
 	<body>
 		<ul>
 			<li th:each="crud_controller: ${crud_controllers}">
-				<a th:href="${crud_controller.listUri()}" th:text="${crud_controller.table.name}">Table</a>
+				<a th:href="${crud_controller.listUri(false)}" th:text="${crud_controller.table.name}">Table</a>
 			</li>
 		</ul>
 	</body>

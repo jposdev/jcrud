@@ -5,6 +5,7 @@ import net.pdp7.jcrud.TableController;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -21,8 +22,8 @@ public class VetController extends TableController {
 
 	@Override
 	@RequestMapping("/list")
-	public ModelAndView list() {
-		return super.list();
+	public ModelAndView list(@RequestParam(value="as_picker", defaultValue="false") boolean asPicker) {
+		return super.list(asPicker);
 	}
 
 	@Override

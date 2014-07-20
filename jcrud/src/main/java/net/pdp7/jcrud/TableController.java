@@ -14,6 +14,7 @@ import net.pdp7.jcrud.widgets.Widget;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
@@ -49,21 +50,23 @@ public class TableController extends TableService {
 		columnWidgets.put(column.getName(), widget);
 	}
 	
-	public ModelAndView list() {
+	public ModelAndView list(@RequestParam(value="as_picker", defaultValue="false") boolean asPicker) {
 		List<Map<String, Object>> items = listItems();
 
 		items.forEach(item -> item.put("edit_uri", editFormUri(item)));
+		items.forEach(item -> item.put("primary_keys", getPrimaryKeysFromItem(item)));
 
 		return new ModelAndView("list", new ImmutableMap.Builder<String, Object>()
 				.put("items", items)
 				.put("columns", listColumns().collect(Collectors.toList()))
 				.put("add_form", addFormUri())
+				.put("as_picker", asPicker)
 				.build()
 		);
 	}
 
-	public UriComponents listUri() {
-		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).list()).build();
+	public UriComponents listUri(boolean asPicker) {
+		return MvcUriComponentsBuilder.fromMethodCall(MvcUriComponentsBuilder.on(getClass()).list(asPicker)).build();
 	}
 
 	public ModelAndView addForm() {
@@ -82,7 +85,7 @@ public class TableController extends TableService {
 		for(Inline inline : inlines) {
 			inline.add(request);
 		}
-		return new RedirectView(listUri().toUriString());
+		return new RedirectView(listUri(false).toUriString());
 	}
 
 	public UriComponents addUri() {
@@ -112,7 +115,7 @@ public class TableController extends TableService {
 		for(Inline inline : inlines) {
 			inline.update(primaryKeys, request);
 		}
-		return new RedirectView(listUri().toUriString());
+		return new RedirectView(listUri(false).toUriString());
 	}
 
 	protected UriComponents editUri(Map<String, Object> item) {
@@ -128,7 +131,7 @@ public class TableController extends TableService {
 				.put("columns", editableColumns().collect(Collectors.toList()))
 				.put("widgets", getWidgets())
 				.put("change_save", changeSaveUri)
-				.put("list", listUri())
+				.put("list", listUri(false))
 				.put("inlines", inlines)
 				.build()
 		);

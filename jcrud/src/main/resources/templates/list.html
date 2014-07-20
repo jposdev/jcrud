@@ -9,9 +9,10 @@
 			</tr>
 			<tr th:each="item: ${items}">
 				<td th:each="column: ${columns}" th:text="${item[column.name]}">Value</td>
-				<td><a th:href="${item.edit_uri}">Edit</a></td>
+				<td th:if="${!as_picker}"><a th:href="${item.edit_uri}">Edit</a></td>
+				<input th:if="${as_picker}" type="hidden" th:value="${item.primary_keys.values().iterator().next()}"/>
 			</tr>
 		</table>
-		<a th:href="${add_form}">Add</a>
+		<a th:href="${add_form}" th:if="${!as_picker}">Add</a>
 	</body>
 </html>

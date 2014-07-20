@@ -6,6 +6,7 @@ import java.util.Collections;
 import javax.sql.DataSource;
 
 import net.pdp7.jcrud.TableController;
+import net.pdp7.jcrud.widgets.PickerForeignKeyWidget;
 import net.pdp7.jcrud.widgets.SelectForeignKeyWidget;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,48 +68,68 @@ public class Application {
 	
 	@Bean
 	public VetController vetController() {
-		VetController vetController = new VetController(table("VETS"), jdbcTemplate);
-		vetController.addInline(foreignKey("VET_SPECIALTIES", "VET_SPECIALTY__VET"), vetSpecialtyController());
-		vetController.addInline(foreignKey("VISITS", "VISIT__VET"), visitController());
-		return vetController;
+		return new VetController(table("VETS"), jdbcTemplate);
+	}
+
+	@Bean
+	public PickerForeignKeyWidget vetWidget() {
+		return new PickerForeignKeyWidget(vetController());
 	}
 
 	@Bean
 	public VetSpecialtyController vetSpecialtyController() {
-		VetSpecialtyController vetSpecialtyController = new VetSpecialtyController(table("VET_SPECIALTIES"), jdbcTemplate);
-		vetSpecialtyController.setWidgetForColumn(column("VET_SPECIALTIES", "PET_TYPE"), petTypeWidget());
-		return vetSpecialtyController;
+		return new VetSpecialtyController(table("VET_SPECIALTIES"), jdbcTemplate);
 	}
-	
-	
+
 	@Bean
 	public OwnerController ownerController() {
-		OwnerController ownerController = new OwnerController(table("OWNERS"), jdbcTemplate);
-		ownerController.addInline(foreignKey("PETS", "PET__OWNER"), petController());
-		return ownerController;
+		return new OwnerController(table("OWNERS"), jdbcTemplate);
+	}
+
+	@Bean
+	public PickerForeignKeyWidget ownerWidget() {
+		return new PickerForeignKeyWidget(ownerController());
 	}
 
 	@Bean
 	public PetController petController() {
-		PetController petController = new PetController(table("PETS"), jdbcTemplate);
-		petController.addInline(foreignKey("VISITS", "VISIT__PET"), visitController());
-		petController.setWidgetForColumn(column("PETS", "PET_TYPE"), petTypeWidget());
-		return petController;
+		return new PetController(table("PETS"), jdbcTemplate);
 	}
 
-	public SelectForeignKeyWidget petTypeWidget() {
-		return new SelectForeignKeyWidget(petTypeController());
+	@Bean
+	public PickerForeignKeyWidget petWidget() {
+		return new PickerForeignKeyWidget(petController());
 	}
 
-	
 	@Bean
 	public PetTypeController petTypeController() {
 		return new PetTypeController(table("PET_TYPES"), jdbcTemplate);
 	}
 
 	@Bean
+	public SelectForeignKeyWidget petTypeWidget() {
+		return new SelectForeignKeyWidget(petTypeController());
+	}
+
+	@Bean
 	public VisitController visitController() {
-		return new VisitController(table("VISITS"), jdbcTemplate);
+		VisitController visitController = new VisitController(table("VISITS"), jdbcTemplate);
+		return visitController;
+	}
+
+	@Bean
+	public Object widgetInlinesConfiguration() {
+		// Separated in an extra @Bean to prevent circular dependencies
+		petController().addInline(foreignKey("VISITS", "VISIT__PET"), visitController());
+		petController().setWidgetForColumn(column("PETS", "PET_TYPE"), petTypeWidget());
+		petController().setWidgetForColumn(column("PETS", "OWNER_ID"), ownerWidget());
+		visitController().setWidgetForColumn(column("VISITS", "PET_ID"), petWidget());
+		visitController().setWidgetForColumn(column("VISITS", "VET_ID"), vetWidget());
+		ownerController().addInline(foreignKey("PETS", "PET__OWNER"), petController());
+		vetSpecialtyController().setWidgetForColumn(column("VET_SPECIALTIES", "PET_TYPE"), petTypeWidget());
+		vetController().addInline(foreignKey("VET_SPECIALTIES", "VET_SPECIALTY__VET"), vetSpecialtyController());
+		vetController().addInline(foreignKey("VISITS", "VISIT__VET"), visitController());
+		return null;
 	}
 
 	protected Table table(String tableName) {
