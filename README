@@ -48,7 +48,6 @@ TODO
 
 We should support UI representation of:
 
- * Outgoing foreign keys: as pickers
  * Primary foreign keys: as "polymorphic" forms
 
 And support:
