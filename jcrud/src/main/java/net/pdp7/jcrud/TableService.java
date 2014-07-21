@@ -44,7 +44,7 @@ public class TableService {
 		jdbcTemplate.update(query, insertKeys);
 	}
 
-	// FIXME: V of primaryKeys being ? extends Object is a hack
+	// FIXME: V of primaryKeys being ? extends Object is a hack #17
 	public void updateItem(Map<String, ? extends Object> primaryKeys, Map<String, Object> updateKeys) {
 		String sets = editableColumnNames()
 				.map(cn -> cn + "=:" + cn)
