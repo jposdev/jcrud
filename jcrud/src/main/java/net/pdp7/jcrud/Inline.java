@@ -122,7 +122,7 @@ public class Inline {
 	}
 
 	protected void processInlineUpdates(Map<String, Object> primaryKeys, WebRequest request) {
-		// TODO: process deletions!
+		// TODO: process deletions! #16
 		List<Map<String, Object>> itemsToUpdate = tableController.listItems(foreignKey.getColumnReferences().stream().collect(Collectors.toMap(cr -> cr.getPrimaryKeyColumn().getName(), cr -> primaryKeys.get(cr.getForeignKeyColumn().getName()))));
 		for(Map<String, Object> itemToUpdate : itemsToUpdate) {
 			Map<String, String> itemToUpdatePrimaryKeys = tableController.getPrimaryKeysFromItem(itemToUpdate);
